@@ -1,0 +1,3859 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width"/>
+    <title>Ccfolia Log</title>
+    <style data-meta="layout">
+
+        :root {
+            --body-background: #424242;
+            --side-bar-background: #424242;
+            --header-background: #4d4d4d;
+            --strong-text-color: #FFF;
+            --rgb-text: 255;
+            --rgb-shadow: 0;
+            --tab-items-height: 150px;
+            --user-items-height: 400px;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: -apple-system, "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            background-color: var(--body-background);
+            overflow-x: hidden;
+            height: 100%;
+            width: 100%;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        .root {
+            display: flex;
+            height: 100%;
+        }
+
+        .side-bar {
+            width: 300px;
+            height: 100%;
+            position: fixed;
+            z-index: 100;
+            background-color: var(--side-bar-background);
+            border-right: 1px solid rgba(var(--rgb-text), var(--rgb-text), var(--rgb-text), 0.12);
+            overflow-y: auto;
+        }
+
+        .side-bar hr {
+            border: none;
+            height: 1px;
+            margin: 0;
+            flex-shrink: 0;
+            background-color: rgba(var(--rgb-text), var(--rgb-text), var(--rgb-text), 0.12);
+        }
+
+        header {
+            background-color: var(--header-background);
+            height: 64px;
+            position: fixed;
+            padding-left: 24px;
+            box-shadow: 0px 2px 4px -1px rgba(var(--rgb-shadow), var(--rgb-shadow), var(--rgb-shadow), 0.2), 0px 4px 5px 0px rgba(var(--rgb-shadow), var(--rgb-shadow), var(--rgb-shadow), 0.14), 0px 1px 10px 0px rgba(var(--rgb-shadow), var(--rgb-shadow), var(--rgb-shadow), 0.12);
+            display: flex;
+            align-items: center;
+        }
+
+        header h1 {
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 1.17em;
+            font-weight: 300;
+            color: var(--strong-text-color);
+            margin: 0;
+        }
+
+        main {
+            position: absolute;
+        }
+
+        .messages-list {
+            margin-top: 64px;
+            margin-bottom: 0px;
+            padding: 8px 0px;
+        }
+
+        /* mobile */
+        @media (max-width: 960px) {
+            .side-bar {
+                left: 0;
+                transform: translateX(-300px);
+                visibility: hidden;
+                transition: 225ms;
+                border-right: none;
+                box-shadow: 0px 8px 10px -5px rgba(var(--rgb-shadow), var(--rgb-shadow), var(--rgb-shadow), 0.20), 0px 16px 24px 2px rgba(var(--rgb-shadow), var(--rgb-shadow), var(--rgb-shadow), 0.14), 0px 6px 30px 5px rgba(var(--rgb-shadow), var(--rgb-shadow), var(--rgb-shadow), 0.12);
+            }
+
+            header {
+                width: 100%;
+            }
+
+            main {
+                width: 100%;
+            }
+
+            .messages-list {
+                width: 100%;
+            }
+
+            #drawer-open:checked ~ .side-bar {
+                transform: none;
+                visibility: visible;
+            }
+
+            .main-cover {
+                transition: 225ms;
+            }
+
+            #drawer-open:checked ~ .main-cover {
+                height: 100%;
+                width: 100%;
+                position: fixed;
+                z-index: 1;
+                background-color: rgba(var(--rgb-shadow), var(--rgb-shadow), var(--rgb-shadow), 0.5);
+            }
+        }
+
+        /* pc */
+        @media (min-width: 960px) {
+            header {
+                width: calc(100% - 300px);
+            }
+
+            main {
+                width: calc(100% - 300px);
+                margin-left: 300px;
+            }
+        }
+    </style>
+    <style data-meta="menu">
+        .menu-root {
+            padding: 8px 0px;
+        }
+
+        .accordion-input {
+            display: none;
+        }
+
+        .accordion-label {
+            padding: 8px 16px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+        }
+
+        .accordion-label-fonts {
+            font-size: 1rem;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-weight: 300;
+            line-height: 1.5;
+            letter-spacing: 0.00938em;
+            color: var(--strong-text-color);
+            margin: 0;
+            width: 243px;
+        }
+
+        .accordion-items:not(:checked) {
+            height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: 300ms;
+        }
+
+        #accordion-menu-tab:checked ~ #tab-items {
+            height: var(--tab-items-height);
+            overflow: visible;
+            opacity: 1;
+        }
+
+        #accordion-menu-user:checked ~ #user-items {
+            height: var(--user-items-height);
+            overflow: visible;
+            opacity: 1;
+        }
+
+        #accordion-menu-tab:checked ~ #tab-items {
+            height: var(--tab-items-height);
+            overflow: visible;
+            opacity: 1;
+        }
+
+        .accordion-item {
+            padding: 4px 16px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .accordion-item-fonts {
+            font-size: 0.875rem;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-weight: 300;
+            line-height: 1.43;
+            letter-spacing: 0.01071em;
+            color: var(--strong-text-color);
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .button-elements {
+            transition: 150ms;
+            cursor: pointer;
+        }
+
+        .button-elements:hover {
+            background-color: rgba(var(--rgb-text), var(--rgb-text), var(--rgb-text), 0.08);
+        }
+
+        .menu-header {
+            display: flex;
+            align-items: center;
+            height: 64px;
+            padding-left: 24px;
+        }
+    </style>
+    <style data-meta="checkbox">
+        .accordion-items input[type="checkbox"] {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            padding-left: 25px;
+            padding-right: 10px;
+        }
+
+        .accordion-items input[type="checkbox"]::before {
+            content: "";
+            position: absolute;
+            box-sizing: border-box;
+            width: 20px;
+            height: 20px;
+            margin-top: -10px;
+            left: 0;
+            top: 50%;
+            border: 2px solid;
+            border-color: rgba(var(--rgb-text), var(--rgb-text), var(--rgb-text), 0.7); /* 枠の色変更 お好きな色を */
+            border-radius: 3px;
+            background-color: var(--side-bar-background);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .1), 0 0 0 rgba(203, 34, 237, .2);
+            -webkit-transition: all .275s;
+            transition: all .275s;
+        }
+
+        .accordion-items input[type="checkbox"]:checked::after {
+            content: "";
+            position: absolute;
+            display: block;
+            box-sizing: border-box;
+            width: 15px;
+            height: 7px;
+            margin-top: -6px;
+            top: 50%;
+            left: 3px;
+            transform: rotate(-45deg);
+            border-bottom: 3px solid;
+            border-left: 3px solid;
+            border-color: rgba(var(--rgb-text), var(--rgb-text), var(--rgb-text), 0.7);
+        }
+    </style>
+    <style data-meta="icons">
+        .hamburger-icon {
+            display: flex;
+            height: 48px;
+            width: 48px;
+            justify-content: center;
+            align-items: center;
+            z-index: 90;
+            cursor: pointer;
+            padding: 12px;
+            margin-left: -12px;
+            margin-right: 16px;
+            border-radius: 24px;
+        }
+
+        .hamburger-icon span,
+        .hamburger-icon span:before,
+        .hamburger-icon span:after {
+            content: '';
+            display: block;
+            height: 2px;
+            width: 18px;
+            background-color: var(--strong-text-color);
+            position: absolute;
+        }
+
+        .hamburger-icon span:before {
+            bottom: 5px;
+        }
+
+        .hamburger-icon span:after {
+            top: 5px;
+        }
+
+        .cancel-icon {
+            display: flex;
+            height: 48px;
+            width: 48px;
+            justify-content: center;
+            align-items: center;
+            z-index: 110;
+            cursor: pointer;
+            padding: 12px;
+            margin-left: -12px;
+            margin-right: 16px;
+            border-radius: 24px;
+        }
+
+        .cancel-icon span,
+        .cancel-icon span:before {
+            content: '';
+            height: 2px;
+            width: 18px;
+            background-color: var(--strong-text-color);
+            position: absolute;
+            transform: rotate(45deg);
+        }
+
+        .cancel-icon span:before {
+            transform: rotate(-90deg);
+        }
+
+        @media (min-width: 960px) {
+            .hamburger-icon {
+                display: none;
+            }
+
+            .cancel-icon {
+                display: none;
+            }
+        }
+    </style>
+    <style data-meta="message-item">
+        .message-item {
+            border-bottom: 1px solid rgba(var(--rgb-text), var(--rgb-text), var(--rgb-text), 0.12);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .message-item .tab-area {
+            width: 56px;
+            min-width: 56px;
+        }
+
+        .message-item .tab-area .tab-text {
+            font-size: 0.75rem;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-weight: 300;
+            line-height: 1.66;
+            letter-spacing: 0.03333em;
+            color: #888888;
+            max-width: 50px;
+            word-break: break-word;
+        }
+
+        .message-item .message-area {
+            margin: 6px 0px;
+        }
+
+        .message-item .message-area .message-user-text {
+            font-size: 1rem;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-weight: 300;
+            line-height: 1.5;
+            letter-spacing: 0.00938em;
+            word-break: break-word;
+            margin: 0;
+        }
+
+        .message-item .message-area .message-content-text {
+            font-size: 0.85rem;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-weight: 300;
+            line-height: 1.43;
+            letter-spacing: 0.01071em;
+            color: rgba(var(--rgb-text), var(--rgb-text), var(--rgb-text), 0.9);
+            word-break: break-word;
+            margin: 0;
+        }
+    </style>
+
+    <script>
+        const showHide = (checkbox) => {
+            const targetMessages = document.getElementsByClassName(checkbox.id)
+            for (let i = 0; i < targetMessages.length; i++) {
+                const message = targetMessages[i]
+                const contexts = message.className.split(' ')
+                let checked = checkbox.checked
+                contexts.forEach((context) => {
+                    const contextCheckbox = document.getElementById(context)
+                    if (contextCheckbox) {
+                        checked &= contextCheckbox.checked
+                    }
+                })
+                message.style.display = checked ? '' : 'none'
+            }
+        }
+    </script>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, nocache">
+<style>* { font-family: sans-serif !important; }</style>
+<script src="norobot.js"></script>
+<script>if (!window.location.href.includes("forceReloaded")) { const sep = window.location.href.includes("?") ? "&" : "?"; window.location.href = window.location.href + sep + "forceReloaded=1"; }</script>
+</head>
+<body>
+<div class="root">
+    <input id="drawer-open" class="accordion-input" type="checkbox">
+    <nav class="side-bar">
+        <div class="menu-header">
+            <label for="drawer-open" class="cancel-icon button-elements">
+                <span></span>
+            </label>
+        </div>
+        <hr>
+        <div class="menu-root">
+            <!-- tabs -->
+            <input id="accordion-menu-tab" class="accordion-input" type="checkbox" checked="checked">
+            <label for="accordion-menu-tab" class="accordion-label button-elements">
+                <span class="accordion-label-fonts">Tabs</span>
+            </label>
+            <div id="tab-items" class="accordion-items">
+                <label for="tab-main" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="tab-main" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">main</span>
+                </label>
+                <label for="tab-info" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="tab-info" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">info</span>
+                </label>
+                <label for="tab-other" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="tab-other" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">other</span>
+                </label>
+
+            </div>
+
+            <!-- users -->
+            <input id="accordion-menu-user" class="accordion-input" type="checkbox" checked="checked">
+            <label for="accordion-menu-user" class="accordion-label button-elements">
+                <span class="accordion-label-fonts">Users</span>
+            </label>
+            <div id="user-items" class="accordion-items">
+                <label for="user-■" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="user-■" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">■</span>
+                </label>
+                <label for="user-南條 雨祢 (なんじょう あまね)" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="user-南條 雨祢 (なんじょう あまね)" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">南條 雨祢 (なんじょう あまね)</span>
+                </label>
+                <label for="user-藤代 亨(ふじしろ とおる)" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="user-藤代 亨(ふじしろ とおる)" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">藤代 亨(ふじしろ とおる)</span>
+                </label>
+                <label for="user-桐島 海 (きりしま かい)" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="user-桐島 海 (きりしま かい)" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">桐島 海 (きりしま かい)</span>
+                </label>
+                <label for="user-八百屋" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="user-八百屋" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">八百屋</span>
+                </label>
+                <label for="user-子供A" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="user-子供A" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">子供A</span>
+                </label>
+                <label for="user-子供B" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="user-子供B" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">子供B</span>
+                </label>
+                <label for="user-警備員" class="accordion-item button-elements">
+                    <div style="width: 56px;">
+                        <input id="user-警備員" onclick="showHide(this)" type="checkbox" checked="checked">
+                    </div>
+                    <span class="accordion-item-fonts">警備員</span>
+                </label>
+
+            </div>
+        </div>
+    </nav>
+    <label for="drawer-open" class="main-cover"></label>
+    <main>
+        <header>
+            <!-- hamburger button -->
+            <label for="drawer-open" class="hamburger-icon button-elements">
+                <span></span>
+            </label>
+            <h1>Ccfolia Log</h1>
+        </header>
+        <div class="messages-list">
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            あなたは探偵事務所にいる。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            応接室のソファに寝っ転がり、ひたすらアプリゲームをしている。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「っあ～～～～！！！なぜこの世には期間ランキングというものが存在するんだい！？！？仕事をしていたらこんなもの上位に入れるはずないじゃあないか！なあワトソン君！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            「知りません。あと坊ちゃんは今仕事をしていないです。仕事をしてください。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「うわっ………！も～～～！ワトソン君が坊ちゃんなんていうからミスをしてしまったじゃないか！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            落胆したようにスマホを反対のソファに放り投げ、はあとため息をついて座りなおす。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「まったく、キミはここの秘書なんだからぼくの事は「先生」って呼ぶように言っているだろう？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            「失礼。今の坊ちゃんはまるで「先生」とは思えませんでしたので。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ま～～～ったく！キミというやつは本当にいつもいつも───」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            その時、来客を示すブザーが鳴り響く。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「！ ワトソン君！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            何も言わずに頷き、玄関の方へと足早に向かい、来客を迎えるべくドアを開く。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「あ、失礼します。南條探偵事務所でお間違いないでしょうか…？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            「ええ、ご依頼の方ですか？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「はい。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            「でしたら中へどうぞ。所長もおりますのでソファでお待ちください。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            玄関の方から聞こえてくる声に耳をそばだてながら、応接室の隣室へとそそくさと移動し、鏡を見ながら簡単に身だしなみを整える。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            通されるままにソファに座る。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            来客の為に紅茶を淹れ、テーブルに置く。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            「どうぞ。間もなく所長がいらっしゃいます。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            隣室からがちゃりとドアを開けて応接室に入る。威厳を感じさせるように胸を張り、ゆったりとした足取りだ。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「やあ、キミが依頼人君かね？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「あ、どうも。あなたが所長さんですか。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            入って来た中性的な男性に気づくと立ち上がり、ぺこりとお辞儀をする。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「いかにも。ぼくが南條雨祢だ。キミの名前は？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            名刺を懐から取り出し、南條に差し出す。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「私、株式会社ルミナクトの社長をしております。桐島 海と申します。今回はよろしくお願いいたします。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ルミナクト……？ふむ、何の会社だろう？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「昨今の……そうですね、プロジェクションマッピングやモールのライトアップなどの、映像や光を扱ったイベントを運営したり企画したりしている会社ですね。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「へえ！なんだか面白そうな会社だね！そこの社長さんが今回は何のご依頼かな？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            目に見えてうきうきとした様子で前のめりに依頼人に話を聞く。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「ああ……ええと、会社の事ではなくプライベートでの依頼なんですが……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ああ、勿論構わないとも。さ、座って座って。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            所長の勢いに若干圧されながらも促されるまま着席し、話を切り出す。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「実はその、飼っている猫が逃げてしまって……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            その言葉を聞いたや否や、あからさまにぴたりと反応が止まり、はぁ……とため息を吐く。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            その様子を気にもせず……というよりも、心配が勝っているのか気づかないかのように話を続ける。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「どうやら空気の入れ替えで窓を少し開けている間に窓のある部屋に入り込んでそのまま逃げてしまったようで……。赤ちゃんの時からずっと飼っているので外も知らないはずですから、どこかで危ない思いをしていないかと不安で……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ああ、うん。猫ね。分かったよ。もちろん、鋭意引き受けよう。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            若干生返事になっている。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            その様子を部屋の端で見ていた藤代はじろり、と南條をたしなめるようににらんだ。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「本当ですか……！ありがとうございます。報酬の方はいくらになりますでしょうか……？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「う～ん、キミが何日位探すのにお金を出せるかかな？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「そうですね……ついさっきいなくなったので、見つかるまでそんなにかからないと思いますが……三日ほどでしょうか……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「うんうん、わかったよ！では早速調査を始めようか。まずはキミの猫ちゃんの写真か何か見せてくれないかい？スマホで撮ったやつとか。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「ありがとうございます！ええと……こちらなんですが……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            スマホを取り出し、猫の画像を見せる。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「おお、なかなか美人だ。毛並みがしっかりしている。名前は？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「レインと言います。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「おお！ではぼくとおそろいだね。そりゃあ美人なわけだ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            満足そうにニコニコ笑いながらスマホを返す。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ああ、一応連絡先交換と……その画像も僕に送ってもらおうかな。メールかメッセージアプリを教えてくれるかい？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「ああ、そうですね。ではこちらで……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            LINEのアプリを提示する。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「おっ、じゃあ交換しよう。ほら、振って振って！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            楽しそうに桐島のスマホに向けて自分のスマホを振る。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            困ったように笑いながら自分もスマホを振る。連絡先を交換出来た。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「じゃ、改めて捜索だ！ワトソン君！猫探しセットを持ってきてくれたまえ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            「……はい、こちらに。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-藤代 亨(ふじしろ とおる)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #607d8b;" class="message-user-text">
+                            藤代 亨(ふじしろ とおる)
+                        </p>
+                        <p class="message-content-text">
+                            手には虫取り編のようなものや、猫用のケージ、猫餌、猫用のおもちゃなどが用意されている。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「うむ！これで準備は万端だ！キミも来るかい？桐島君。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「はい、丁度明日明後日は休日ですから。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「よろしい！では行こうじゃないか！レイン捜索隊、出動だ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ◆
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            あなたたちは依頼人の自宅へやってきた。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            住宅街の一角にある、庭付きの一戸建てだ。<br>猫はこの家から逃げ出したらしい。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            【探索可能箇所】<br>・庭先<br>・郵便受け<br>・路地
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ここが桐島君のお家だね！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「はい、恐らく逃げたのはこっちの庭だと思うんですが……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜目星＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=45 【目星】 (1D100&lt;=45) ＞ 73 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=85 【目星】 (1D100&lt;=85) ＞ 51 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            植木鉢が倒れている。小さな足跡が土の上に残っている。東の路地へ続いているようだ。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「……あっ！足跡だ……！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「む！？ではそっちに行ったのか！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜聞き耳＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=45 【聞き耳】 (1D100&lt;=45) ＞ 18 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=25 【聞き耳】 (1D100&lt;=25) ＞ 12 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            路地から、かすかな猫の鳴き声がする。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「今の……！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ああ、聞こえたとも！もしかしたらスピード解決かもしれないね！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜目星＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=45 【目星】 (1D100&lt;=45) ＞ 41 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=85 【目星】 (1D100&lt;=85) ＞ 15 ＞ スペシャル
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            猫の姿はない。しかし、足跡が点々と続いているのが確認できる。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「見ろ！足跡だ！こうして残っているのはまだ最近ついたばかりという証拠さ！桐島君、きっともうすぐキミのレインに会えるぞ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「ええ……！レインー！どこだー！？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ◆
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            しばらく進むと、八百屋の前で足跡は消えていた。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            店先には野菜が並び、陽気なおばさんが店番をしている。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「む、八百屋か……？失礼、そこのお嬢さん、この辺りで猫を見なかったかな？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜説得＞ or ＜信用＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=15 【信用】 (1D100&lt;=15) ＞ 80 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=85 【信用】 (1D100&lt;=85) ＞ 41 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-八百屋">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            八百屋
+                        </p>
+                        <p class="message-content-text">
+                            「あら、お嬢さんだなんて！もう、嬉しいこと言ってくれるじゃないか～　んで、どれをまけてほしいの？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「えっ？いや……え～と、じゃあキミの今日のおすすめを一つもらおうかな？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-八百屋">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            八百屋
+                        </p>
+                        <p class="message-content-text">
+                            「それじゃあね、今日はこれがおすすめだよ！ゴ・ボ・ウ！きんぴらにするもよし、お味噌汁に入れてもよし！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「へえ！きんぴらかぁ、美味しそうだね！キミが作ったきんぴらはことさらに美味そうだ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「言ってる場合ですか！……おばさん、私の猫がいなくなってしまったんです！こっちに来てませんか？！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-八百屋">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            八百屋
+                        </p>
+                        <p class="message-content-text">
+                            「あら！そりゃあ大変ねえ。じゃあさっき見かけたあの子……野良じゃなかったのかしら」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-八百屋">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            八百屋
+                        </p>
+                        <p class="message-content-text">
+                            「さっき、公園の方に走ってく三毛猫ちゃんがいたのよ。野良ネコちゃんかと思ったんだけど……」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「……！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「三毛猫！まさにそれがぼく達が探していたレインだ！ありがとうマドモワゼル！また後でゴボウを買いに来るから取り置いてくれたまえ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-八百屋">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            八百屋
+                        </p>
+                        <p class="message-content-text">
+                            「閉店までには来ておくれよ～！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「まかせたまえ～～～！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            走って向かいながら八百屋のおばさんに声を掛ける。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ◆
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            夕暮れ時の公園。遊具では子供たちが遊び、ベンチには数人が腰掛けている。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            【探索可能箇所】<br>・ベンチ<br>・砂場<br>・人
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「おっ公園だ。ここならいるんじゃないかな？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「レインー？ 帰るぞー？出てこーい！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜目星＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=45 【目星】 (1D100&lt;=45) ＞ 63 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=85 【目星】 (1D100&lt;=85) ＞ 37 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ベンチの付近に、小さな首輪が落ちている。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「………！これはっ……！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「あれっ、首輪……もしかしてそれ……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「ええ、レインのものです……！どうして………。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「野良猫に襲われていたりしないといいけど……。とにかく、早く見つけないといけない理由が増えてしまったね。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜追跡＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=10 【追跡】 (1D100&lt;=10) ＞ 95 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=10 【追跡】 (1D100&lt;=10) ＞ 47 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=50 【ナビゲート】 (1D100&lt;=50) ＞ 82 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「うーん、砂場もいなさそうだし……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜説得＞ or ＜信用＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=15 【信用】 (1D100&lt;=15) ＞ 36 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=85 【信用】 (1D100&lt;=85) ＞ 57 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            子供たちが元気に駆け回っている。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「おーい、君達、少しいいかな？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-子供A">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            子供A
+                        </p>
+                        <p class="message-content-text">
+                            「おじさんだれー？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「この辺りに住んでるんだ。猫を探してるんだけど、この公園で見てないかな？三毛猫なんだけど。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            子供達に目線を合わせるようにかがんで話す。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-子供B">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            子供B
+                        </p>
+                        <p class="message-content-text">
+                            「あっ、猫！さっきいた！でもねー、どっかいった！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「……！本当かい？どっちに行ったか分かる？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-子供B">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            子供B
+                        </p>
+                        <p class="message-content-text">
+                            「あっちー」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            子供は、公園の外を指さす。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「あっちだね、ありがとう。君達も暗くなる前に帰るんだよ。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            子供達に微笑みながら立ち上がる。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「南條さん、あっちに行ったみたいです！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「おお！素晴らしい調査力だ！桐島君、キミ、ぼくのワトソン君二号にならないか？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「えっ？いや、ははは……私仕事があるんで流石に兼業は……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「そうかい？気が変わったらいつでも言ってくれたまえよ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ◆
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            公園を出ると、その先には倉庫街が広がっていた。あたりはすっかり暗くなっている。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            倉庫街の入り口は、いかつい顔をした警備員が見張っているようだ。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ふむ、こっちは倉庫街だな。いたら割とすぐに見つけられる気もするが……。ちょっとそこのキミ、猫を見なかったかね？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-警備員">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            警備員
+                        </p>
+                        <p class="message-content-text">
+                            「猫ぉ……？いや、知らんな」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「本当に見ていませんか？三毛猫なんですけど……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-警備員">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            警備員
+                        </p>
+                        <p class="message-content-text">
+                            「知らん知らん。ここは関係者以外立ち入り禁止だ、帰りな」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「むぅ、これは困ったね……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=95 【言いくるめ】 (1D100&lt;=95) ＞ 21 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「そういえばここの倉庫、管理は上南運輸システムだったかな？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-警備員">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            警備員
+                        </p>
+                        <p class="message-content-text">
+                            「あ？そうだが……」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ぼくはその親会社の南條グループの者だ。今日は抜き打ちでここの倉庫の備品チェックをするように言われていてね。先日他の倉庫で不備があっただろう？だから親会社である我々もセキュリティ状態について今一度きちんと把握した方がいいという事になったんだ。それこそ猫の子一匹通して、倉庫内の物を猫が破損させたらどうなる？キミも分かるだろう？企業の信用問題というのは築き上げるのは大変時間が掛かるが落ちるのはニュートンのリンゴよりも早い。身分証もほら、こうしてあるし、必要だったら本社に連絡してくれても構わないから。今は入らせてくれないかな？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-警備員">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            警備員
+                        </p>
+                        <p class="message-content-text">
+                            あまりの勢いに、思わず一歩のけぞる。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-警備員">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            警備員
+                        </p>
+                        <p class="message-content-text">
+                            「そ……そう……ですね。その、とおりです」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-警備員">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            警備員
+                        </p>
+                        <p class="message-content-text">
+                            「失礼しました、中へどうぞ……」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「おお！分かってくれるか！いやはや、キミのような社員がいてくれるならこの会社の未来はきっと明るい！はっはっは！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            警備員の背中を叩きながら高笑いをしつつ入っていく。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            南條の異様なまでの口八丁を目の当たりにし、若干戸惑いながらも、入っていく南條について自分も入っていく。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜目星＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=45 【目星】 (1D100&lt;=45) ＞ 74 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=85 【目星】 (1D100&lt;=85) ＞ 41 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            埃っぽい地面に、肉球の跡が点々と続いている。しかし、猫のものよりやや大きいようだ。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「あっ、足跡が………。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「む……？でもこれは猫の足跡かな……？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「………確かに、レインのものだと思うと少し大きすぎる気が……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            足跡の方へ向かう。それは、倉庫の奥まで続いていた。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜聞き耳＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=45 【聞き耳】 (1D100&lt;=45) ＞ 71 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=25 【聞き耳】 (1D100&lt;=25) ＞ 27 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            か細い猫の鳴き声がする。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「……！レイン？！レイーン？！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「どこだーい！レインくーーーん！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            「グルルルル……」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「レインくーん！………れいん、くーん……？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「な、南條さん……レインはそんな鳴き方しないです……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            ＜目星＞　▼
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=45 【目星】 (1D100&lt;=45) ＞ 50 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=85 【目星】 (1D100&lt;=85) ＞ 80 ＞ 成功
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            目を凝らす。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            暗がりに蠢く影が見える。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「あれは……。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「……！？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            倉庫の隅に、震える三毛猫と、それを今にも襲わんとする野犬がいる。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「レイン！！！！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「桐島君、まずい！今声を掛けるのは……！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            野犬は声の方に振り返り、あなたたちを見据える。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            野犬は唸りながら勢いよくあなたがたのほうへと向かってくるだろう。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            咄嗟にスマホを取り出し、野犬に向けてフラッシュを焚く。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「───っ、野犬め！これでどうだ！アマネフラーーーッシュ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            CCB&lt;=20 【写真術】 (1D100&lt;=20) ＞ 84 ＞ 失敗
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            「ギャウゥン！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            まばゆく光るフラッシュに野犬は驚き、そのまま倉庫から出ていった。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「………ふっ、どうだ、ぼくのアマネフラッシュで恐ろしい野犬を追い払ったぞ……！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「レイン、大丈夫か……！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            飼い猫に駆け寄り、抱き上げる。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            レインは震えているが、ケガなどはしていないようだ。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「怪我はなさそうだな……。よかった。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            南條に向き直ると、猫を抱きながら南條に深く頭を下げた。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「本当にありがとうございました。お陰で無事、レインが見つかりました。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「なに、見つかってよかったよ！本当に危ない所だったね。レイン君、もう勝手に外へ行ってはいけないよ？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            抱き抱えられている猫の額を小突く。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「野犬がいたからどうしようかと思いました。けどあんなに機転を上手く利かせられるなんて、流石は探偵さんですね。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ふ、フン……！まあ当然だとも！このぼくにかかればあのくらいは出来て当然というものだ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「そうですか…………っく、くく………。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            押し殺すように桐島は笑いだす。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「……？どうかしたのかい？桐島君。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「いや、あの……ごめんなさい、安心してから思い返したら……くくっ、「アマネフラッシュ」って……はははっ！」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「なっ……！何が悪いんだい！？これ以上なくかっこいい決め台詞じゃあないか！？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「ふっ、あははは！そうですね！かっこよかったです！お陰で追い払えましたしね。……本当にありがとうございました。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            安堵した表情で南條に心からの笑顔を返す。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            笑われた事にバツの悪そうな顔をするも、礼を言われた事に悪い気はしないらしく、ふんっと鼻息を一つ漏らすとぷいと背を向けた。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「ま、これで依頼は完了。今日中に見つかってしまったし、大した仕事でもなかったから依頼料はいらないよ。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「えっ、いや、それはいけないですよ。ちゃんと依頼をしたんですから、払わせてください。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「そもそも！名探偵のぼくに猫探しなんて簡単な依頼は小指の先で解決できてしまう事件だからね！同じ名前を持つ猫の依頼ということで大感謝セール、出血大赤字割引さ。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            呆気にとられたように目をぱちぱちさせる。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「………じゃあ、代わりに、今度何かお礼をさせてください。ご飯でもいいですか？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-南條 雨祢 (なんじょう あまね)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #03a9f4;" class="message-user-text">
+                            南條 雨祢 (なんじょう あまね)
+                        </p>
+                        <p class="message-content-text">
+                            「おお、それの方が余程いい！ぼくは味にはうるさい男だよ？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-桐島 海 (きりしま かい)">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #009688;" class="message-user-text">
+                            桐島 海 (きりしま かい)
+                        </p>
+                        <p class="message-content-text">
+                            「ははは、じゃあしっかり調べておきますね。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-main user-■">
+                <div class="message-item">
+                    <div class="tab-area">
+                        <span class="tab-text">main</span>
+                    </div>
+                    <div class="message-area">
+                        <p style="color: #888888;" class="message-user-text">
+                            ■
+                        </p>
+                        <p class="message-content-text">
+                            『消えた三毛猫を探して』＜終＞
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>
